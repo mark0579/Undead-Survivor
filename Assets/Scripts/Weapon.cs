@@ -15,12 +15,7 @@ public class Weapon : MonoBehaviour
 
     private void Awake()
     {
-        player = GetComponentInParent<Player>();
-    }
-
-    private void Start()
-    {
-        Init();
+        player = GameManager.instance.player;
     }
 
     // Update is called once per frame
@@ -56,17 +51,36 @@ public class Weapon : MonoBehaviour
 
         if(id == 0)
         {
-            Place();
+            Batch();
         }
     }
 
-    public void Init()
+    public void Init(ItemData data)
     {
+        //Basic Set
+        name = "Weapon "+data.itemId;
+        transform.parent = player.transform;
+        transform.localPosition = Vector3.zero;
+
+        //Property Set
+        id = data.itemId;
+        damage = data.baseDamage;
+        count = data.baseCount;
+
+        for (int index=0; index < GameManager.instance.poolManager.prefabs.Length; index++)
+        {
+            if(data.projectile == GameManager.instance.poolManager.prefabs[index])
+            {
+                prefabId = index;
+                break;
+            }
+        }
+
         switch (id)
         {
             case 0:
                 speed = 150; //음수로 해야 시계 방향으로 돔
-                Place();
+                Batch();
                 break;
             default:
                 speed= 0.3f;
@@ -74,7 +88,7 @@ public class Weapon : MonoBehaviour
         }
     }
 
-    void Place()
+    void Batch()
     {
         for (int index=0; index<count; index++)
         {
