@@ -29,6 +29,8 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (!GameManager.instance.isLive) return;
+
         if (!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit")) return;
 
         Vector2 dirVec = target.position - rigid.position; //이항연산에 의해 목표에서 내 위치를 빼면 목표로의 이동 벡터가 나옴.
@@ -39,6 +41,8 @@ public class Enemy : MonoBehaviour
 
     private void LateUpdate()
     {
+        if (!GameManager.instance.isLive) return;
+
         if (!isLive) return;
         spriter.flipX = target.position.x < rigid.position.x;
     }

@@ -25,29 +25,31 @@ public class Player : MonoBehaviour
 
    void Update()
     {
-       /*inputVec.x = Input.GetAxisRaw("Horizontal"); //Raw로 명확한 컨트롤 구현
-       inputVec.y = Input.GetAxisRaw("Vertical");*/
+        if (!GameManager.instance.isLive) return;
+
+       inputVec.x = Input.GetAxisRaw("Horizontal"); //Raw로 명확한 컨트롤 구현
+       inputVec.y = Input.GetAxisRaw("Vertical");
     }
 
     //물리에 대해서는 FixedUpadate로 이용
     private void FixedUpdate()
     {
+        if (!GameManager.instance.isLive) return;
+
+
         Vector2 nextVec = inputVec * speed * Time.fixedDeltaTime;
         rigid.MovePosition(rigid.position + nextVec);
     }
 
     private void LateUpdate() //프레임이 종료 되기 전 실행되는 생명주기 함수
     {
+        if (!GameManager.instance.isLive) return;
+
         anim.SetFloat("Speed", inputVec.magnitude); //magnitude : 벡터의 순수한 크기 값
 
         if (inputVec.x != 0)
         {
             spriter.flipX = inputVec.x < 0 ;
         }
-    }
-
-    void OnMove(InputValue value)
-    {
-        inputVec = value.Get<Vector2>();
     }
 }

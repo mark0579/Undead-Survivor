@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem.Processors;
 
 public class Bullet : MonoBehaviour
 {
@@ -24,6 +25,11 @@ public class Bullet : MonoBehaviour
         }
     }
 
+    private void Update()
+    {
+        Dead();
+    }
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!collision.CompareTag("Enemy") || per == -1) return;
@@ -35,6 +41,15 @@ public class Bullet : MonoBehaviour
             rigid.velocity = Vector2.zero;
             gameObject.SetActive(false);
         }
+    }
+
+    void Dead()
+    {
+        Transform target = GameManager.instance.player.transform;
+        Vector3 targetPos = target.position;
+        float dir = Vector3.Distance(targetPos, transform.position);
+        if (dir > 20f)
+            this.gameObject.SetActive(false);
     }
 
 }
